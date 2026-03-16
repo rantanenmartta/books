@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
+import items
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -24,14 +25,8 @@ def create_item():
     description = request.form.get("description", "")
     user_id = session["user_id"]
 
-    sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id)
-             VALUES (?, ?, ?, ?, ?)"""
-    try:
-        db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
-        print("INSERT OK")
-    except Exception as e:
-        print("DB ERROR:",e)
-        return "Database error", 400
+    items.add_item(book_name, writer_name, pub_year, description, user_id)
+
     return redirect("/")
 
 @app.route("/register")
