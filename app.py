@@ -18,18 +18,20 @@ def new_item():
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
-    print("Session:", session)
-
     book_name = request.form["book_name"]
     writer_name = request.form["writer_name"]
     pub_year = request.form["pub_year"]
-    description = request.form["description"]
+    description = request.form.get("description", "")
     user_id = session["user_id"]
 
     sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id)
              VALUES (?, ?, ?, ?, ?)"""
-    db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
-
+    try:
+        db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
+        print("INSERT OK")
+    except Exception as e:
+        print("DB ERROR:",e)
+        return "Database error", 400
     return redirect("/")
 
 @app.route("/register")
