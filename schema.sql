@@ -3,3 +3,12 @@ CREATE TABLE users (
 	username TEXT UNIQUE,
 	password_hash TEXT
 )
+
+CREATE TABLE books (
+    id INTEGER PRIMARY KEY,
+    book_name TEXT,
+    writer_name TEXT,    --change to references writers, use id here
+    pub_year INTEGER,
+    description TEXT,
+    user_id INTEGER REFERENCES users
+);
