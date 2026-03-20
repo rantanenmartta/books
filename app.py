@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
@@ -13,6 +13,16 @@ app.secret_key = config.secret_key
 def index():
     all_items = items.get_items()
     return render_template("index.html", items=all_items)
+
+@app.route("/find_item")
+def find_item():
+    query = request.args.get("query")
+    if query:
+        results = items.find_items(query)
+    else:
+       query = ""
+       results = []
+    return render_template("find_item.html", query=query, results=results)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
@@ -39,11 +49,17 @@ def create_item():
 def edit_item(item_id):
     item = items.get_item(item_id)
     books = items.get_items()
+    if item["user_id"] != session["user_id"]:
+         abort(403)
     return render_template("edit_item.html", item=item, books=books)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
     item_id = request.form["item_id"]
+    item = items.get_item(item.id)
+    if item["user_id"] != session["user_id"]:
+         abort(403)
+
     book_name = request.form["book_name"]
     writer_name = request.form["writer_name"]
     pub_year = request.form["pub_year"]
@@ -55,6 +71,9 @@ def update_item():
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
+    item = items.get_item(item_id)
+    if item["user_id"] != session["user_id"]:
+         abort(403)
     if request.method == "GET":
     	item = items.get_item(item_id)
     	return render_template("remove_item.html", item=item)

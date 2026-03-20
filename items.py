@@ -39,3 +39,12 @@ def update_item(item_id, book_name, writer_name, pub_year, description):
 def remove_item(item_id):
     sql = "DELETE FROM books WHERE id = ?"
     db.execute(sql, [item_id])
+
+
+def find_items(query):
+    sql = """SELECT id, book_name
+             FROM books
+             WHERE book_name LIKE ? or writer_name LIKE ? or pub_year LIKE ? or description LIKE ?
+             ORDER BY id DESC"""
+    like = "%" + query + "%"
+    return db.query(sql, [like, like, like, like])
