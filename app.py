@@ -35,6 +35,25 @@ def create_item():
 
     return redirect("/")
 
+@app.route("/edit_item/<int:item_id>")
+def edit_item(item_id):
+    item = items.get_item(item_id)
+    books = items.get_items()
+    return render_template("edit_item.html", item=item, books=books)
+
+@app.route("/update_item", methods=["POST"])
+def update_item():
+    item_id = request.form["item_id"]
+    book_name = request.form["book_name"]
+    writer_name = request.form["writer_name"]
+    pub_year = request.form["pub_year"]
+    description = request.form.get("description", "")
+
+    items.update_item(item_id, book_name, writer_name, pub_year, description)
+
+    return redirect("/item/" + str(item_id))
+
+
 @app.route("/register")
 def register():
     return render_template("register.html")

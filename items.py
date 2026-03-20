@@ -16,12 +16,22 @@ def get_items():
     return db.query(sql)
 
 def get_item(item_id):
-    sql = """SELECT b.book_name,
+    sql = """SELECT b.id,
+                    b.book_name,
                     b.writer_name,
                     b.pub_year,
                     b.description,
+                    u.id user_id,
                     u.username
              FROM books b, users u
              WHERE b.user_id = u.id AND
                    b.id = ?"""
     return db.query(sql, [item_id])[0]
+
+def update_item(item_id, book_name, writer_name, pub_year, description):
+   sql = """UPDATE books SET book_name = ?,
+                             writer_name = ?,
+                             pub_year = ?,
+                             description = ?
+                         WHERE id = ?"""
+   db.execute(sql, [book_name, writer_name, pub_year, description, item_id])
