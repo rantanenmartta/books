@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Kirjan poisto</title>
+</head>
+
+<body>
+   <h1>Kirjan poisto</h1>
+   <p>Kirja: {{ item.book_name }}</p>
+   <p>Haluatko varmasti poistaa tämän kirjan?</p>
+   <form action="/remove_item/{{ item.id }}" method="post">
+     <input type="submit" name="remove" value="Poista kirja">
+     <input type="submit" name="back" value="Palaa takaisin">
+   </form>
+</body>
+
+</html>
