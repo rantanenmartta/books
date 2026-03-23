@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import config
 import db
 import items
+import re
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -45,9 +46,19 @@ def create_item():
     require_login()
 
     book_name = request.form["book_name"]
+    if not book_name or len(book_name) > 50:
+        abort(403)
     writer_name = request.form["writer_name"]
+    if not writer_name or len(writer_name) > 50:
+        abort(403)
     pub_year = request.form["pub_year"]
+
+    if not re.search("^[1-9][0-9]{0,4}$", pub_year):
+        abort(403)
     description = request.form.get("description", "")
+    if not description or len(description) > 1500:
+        abort(403)
+
     user_id = session["user_id"]
 
     items.add_item(book_name, writer_name, pub_year, description, user_id)
@@ -76,9 +87,17 @@ def update_item():
          abort(403)
 
     book_name = request.form["book_name"]
+    if not book_name or len(book_name) > 50:
+        abort(403)
     writer_name = request.form["writer_name"]
+    if not writer_name or len(writer_name) > 50:
+        abort(403)
     pub_year = request.form["pub_year"]
+    if not re.search("^[1-9][0-9]{0,4}$", pub_year):
+        abort(403)
     description = request.form.get("description", "")
+    if not description or len(description) > 1500:
+        abort(403)
 
     items.update_item(item_id, book_name, writer_name, pub_year, description)
 
