@@ -9,6 +9,10 @@ import items
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/")
 def index():
     all_items = items.get_items()
@@ -33,10 +37,13 @@ def show_item(item_id):
 
 @app.route("/new_item")
 def new_item():
+    require_login()
     return render_template("new_item.html")
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
+    require_login()
+
     book_name = request.form["book_name"]
     writer_name = request.form["writer_name"]
     pub_year = request.form["pub_year"]
@@ -49,6 +56,7 @@ def create_item():
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
+    require_login()
     item = items.get_item(item_id)
     books = items.get_items()
     if not item:
@@ -59,8 +67,9 @@ def edit_item(item_id):
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
+    require_login()
     item_id = request.form["item_id"]
-    item = items.get_item(item.id)
+    item = items.get_item(item_id)
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -77,6 +86,7 @@ def update_item():
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
+    require_login()
     item = items.get_item(item_id)
     if not item:
         abort(404)
@@ -137,6 +147,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["user_id"]
-    del session["username"]
+    if "user_id" in session:
+        del session["user_id"]
+        del session["username"]
     return redirect("/")

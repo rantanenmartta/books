@@ -12,18 +12,24 @@
   <p>
     Olet kirjautunut nimellä {{ session.username }}, id-numerosi on {{ session.user_id}}
   </p>
-  {% endif %}
-
+  <p>
+    <a href="/logout">Kirjaudu ulos</a>
+  </p>
+  <p>
+    <a href="/new_item">Lisää kirja</a>
+  </p>
+  {% else %}
   <p>
     <a href="/login">Kirjaudu sisään</a>
     <a href="/register">Luo tunnus</a>
-    <a href="/logout">Kirjaudu ulos</a>
   </p>
   
+  {% endif %}
+  
   <p>
-    <a href="/new_item">Lisää kirja</a>
     <a href="/find_item">Etsi kirja</a>
   </p>
+  
   <h2>Käyttäjien lisäämät kirjat</h2>
     <ul>
      {% for item in items %}
