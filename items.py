@@ -26,7 +26,8 @@ def get_item(item_id):
              FROM books b, users u
              WHERE b.user_id = u.id AND
                    b.id = ?"""
-    return db.query(sql, [item_id])[0]
+    result = db.query(sql, [item_id])
+    return result[0] if result else None
 
 def update_item(item_id, book_name, writer_name, pub_year, description):
    sql = """UPDATE books SET book_name = ?,

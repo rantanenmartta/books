@@ -27,6 +27,8 @@ def find_item():
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
     item = items.get_item(item_id)
+    if not item:
+        abort(404)
     return render_template("show_item.html", item=item)
 
 @app.route("/new_item")
