@@ -24,35 +24,20 @@
       Kuvaus: <br />
       <textarea name="description" rows="8" cols="60" maxlength="1500" required ></textarea>
     </p>
+    {% for class in classes %}
     <p>
-     Genre: <br />
-     <select name="genre">
-       <option value="">{valitse}</option>
-       <option value="fantasia">fantasia</option>
-       <option value="romantiikka">romantiikka</option>
-       <option value="scifi">scifi</option>
-       <option value="dystopia">dystopia</option>
-       <option value="kauhu">kauhu</option>
-       <option value="jännitys/trilleri">jännitys/trilleri</option>
-       <option value="rikos/dekkari">rikos/dekkari</option>
-       <option value="historiallinen romaani">historiallinen romaani</option>
-       <option value="tietokirjallisuus">tietokirjallisuus</option>
-       <option value="elämäkerrat">elämäkerrat</option>
-       <option value="runous">runous</option>
-       <option value="muu">muu</option>
-     </select>
-    </p>
-    <p>
-      Lukutapa: <br />
-      <select name="format">
-        <option value="">{valitse}</option>
-        <option value="painettu kirja">painettu kirja</option>
-        <option value="e-kirja">e-kirja</option>
-        <option value="äänikirja">äänikirja</option>
+      {{ class }}: <br />
+      <select name="classes">
+        <option value="">(valitse)</option>
+      {% for option in classes[class] %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      {% endfor %}
       </select>
     </p>
+    {% endfor %}
     <input type="submit" value="Lisää kirja" />
   </form>
 </body>
 
 </html>
+
