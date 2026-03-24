@@ -1,14 +1,18 @@
 import db
 
-def add_item(book_name, writer_name, pub_year, description, user_id):
+def add_item(book_name, writer_name, pub_year, description, user_id, classes):
     sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id)
              VALUES (?, ?, ?, ?, ?)"""
-
     try:
         db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
     except Exception as e:
        print("DB Error:", e)
        return "Database error", 400
+
+    item_id = db.last_insert_id()
+    sql = "INSERT INTO book_classes (book_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [item_id, title, value])
 
 def get_items():
     sql = "SELECT id, book_name FROM books ORDER BY id DESC"
@@ -49,3 +53,7 @@ def find_items(query):
              ORDER BY id DESC"""
     like = "%" + query + "%"
     return db.query(sql, [like, like, like, like])
+
+def get_classes(item_id):
+    sql = "SELECT title, value FROM book_classes WHERE book_id = ?"
+    return db.query(sql, [item_id])
