@@ -22,6 +22,7 @@ def add_item(book_name, writer_name, pub_year, description, user_id, classes):
        return "Database error", 400
 
     item_id = db.last_insert_id()
+
     sql = "INSERT INTO book_classes (book_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [item_id, title, value])
