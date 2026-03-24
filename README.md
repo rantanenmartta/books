@@ -11,4 +11,24 @@
   * Käyttäjä pystyy valitsemaan kirjalle kirjallisuuslajin/genren (esim. kaunokirjallisuus, dekkari, skifi)
   * Käyttäjät pystyvät keskustelemaan kirjasta kommenttiosiossa ja antamaan halutessaan arvosanan. Kirjasta annetut kommentit (ja arvosanat) on koottu yhteen.
 
+## Sovelluksen asennus
+
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut ja lisää alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```
+
     
