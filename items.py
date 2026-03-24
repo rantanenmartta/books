@@ -11,6 +11,7 @@ def get_all_classes():
         classes[title].append(value)
 
     return classes
+
 def add_item(book_name, writer_name, pub_year, description, user_id, classes):
     sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id)
              VALUES (?, ?, ?, ?, ?)"""
@@ -44,13 +45,20 @@ def get_item(item_id):
     result = db.query(sql, [item_id])
     return result[0] if result else None
 
-def update_item(item_id, book_name, writer_name, pub_year, description):
+def update_item(item_id, book_name, writer_name, pub_year, description, classes):
    sql = """UPDATE books SET book_name = ?,
                              writer_name = ?,
                              pub_year = ?,
                              description = ?
                          WHERE id = ?"""
    db.execute(sql, [book_name, writer_name, pub_year, description, item_id])
+
+   sql = "DELETE FROM book_classes WHERE book_id = ?"
+   db.execute(sql, [item_id])
+
+   sql = "INSERT INTO book_classes (book_id, title, value) VALUES (?, ?, ?)"
+   for title, value in classes:
+       db.execute(sql, [item_id, title, value])
 
 def remove_item(item_id):
     sql = "DELETE FROM books WHERE id = ?"
