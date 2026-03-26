@@ -13,6 +13,14 @@ CREATE TABLE books (
     user_id INTEGER REFERENCES users
 );
 
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    book_id INTEGER REFERENCES books,
+    user_id INTEGER REFERENCES users,
+    content TEXT,
+    sent_at TEXT
+);
+
 CREATE TABLE classes (
     id INTEGER PRIMARY KEY,
     title TEXT,
