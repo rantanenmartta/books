@@ -33,7 +33,7 @@ def add_comment(book_id, user_id, content):
     db.execute(sql, [book_id, user_id, content])
 
 def get_comments(item_id):
-    sql = """SELECT comments.content, comments.sent_at, users.id user_id, users.username
+    sql = """SELECT comments.id, comments.content, comments.book_id, comments.sent_at, users.id user_id, users.username
              FROM comments, users
              WHERE comments.book_id = ? AND comments.user_id = users.id
              ORDER BY comments.id DESC"""
@@ -88,6 +88,17 @@ def find_items(query):
              ORDER BY id DESC"""
     like = "%" + query + "%"
     return db.query(sql, [like, like, like, like])
+
+
+def update_comment(comment_id, content):
+   sql = "UPDATE comments SET content = ? WHERE id = ?"
+   db.execute(sql, [content, comment_id])
+
+def get_comment(comment_id):
+    sql = """SELECT comments.id, comments.content, comments.book_id, comments.sent_at, comments.user_id, users.id user_id, users.username
+             FROM comments, users
+             WHERE comments.id = ? and comments.user_id = users.id"""
+    return db.query(sql, [comment_id])
 
 def get_classes(item_id):
     sql = "SELECT title, value FROM book_classes WHERE book_id = ?"

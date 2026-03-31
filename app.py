@@ -187,9 +187,44 @@ def create_comment():
         abort(403)
     user_id = session["user_id"]
     content = request.form.get("content", "")
-    print("Content:", content)
 
     items.add_comment(item_id, user_id, content)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/edit_comment/<int:comment_id>", methods=["GET"])
+def edit_comment(comment_id):
+    require_login()
+
+    comment_all = items.get_comment(comment_id)
+    comment = comment_all[0]
+    if not comment_all:
+         abort(404)
+    if comment["user_id"] != session["user_id"]:
+         abort(403)
+    item = items.get_item(comment["book_id"])
+    return render_template("edit_comment.html", item=item, comment=comment)
+
+@app.route("/update_comment", methods=["POST"])
+def update_comment():
+    require_login()
+
+    comment_id = request.form["comment_id"]
+    item_id = request.form["item_id"]
+
+    comment_all = items.get_comment(comment_id)
+    if not comment_all:
+        abort(404)
+    comment = comment_all[0]
+
+    if comment["user_id"] != session["user_id"]:
+         abort(403)
+
+    content = request.form.get("content", "")
+    if not content or len(content) > 3000:
+        abort(403)
+
+    items.update_comment(comment_id, content)
 
     return redirect("/item/" + str(item_id))
 

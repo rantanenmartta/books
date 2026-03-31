@@ -38,7 +38,13 @@
    <h2>Kommentit</h2>
    <ul>
      {% for comment in comments %}
+     
      <li>{{ comment.content }} <a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})</li>
+     {% if session.user_id == comment.user_id %}
+     <p>
+       <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
+     </p>
+     {% endif %}
      {% endfor %}
    </ul>
    <h2>Uusi kommentti</h2>
