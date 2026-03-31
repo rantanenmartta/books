@@ -228,6 +228,31 @@ def update_comment():
 
     return redirect("/item/" + str(item_id))
 
+@app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
+def remove_comment(comment_id):
+    require_login()
+    comment_all = items.get_comment(comment_id)
+
+    if not comment_all:
+        abort(404)
+    comment = comment_all[0]
+    item_id = comment["book_id"]
+
+    if comment["user_id"] != session["user_id"]:
+         abort(403)
+    if request.method == "GET":
+        comment_all = items.get_comment(comment_id)
+        comment = comment_all[0]
+
+        return render_template("remove_comment.html", comment=comment)
+
+    if request.method == "POST":
+        if "remove" in request.form:
+            items.remove_comment(comment_id)
+            return redirect("/item/" + str(item_id))
+        else:
+            return redirect("/item/" + str(item_id))
+
 
 @app.route("/register")
 def register():

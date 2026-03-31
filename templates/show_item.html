@@ -43,6 +43,7 @@
      {% if session.user_id == comment.user_id %}
      <p>
        <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
+       <a href="/remove_comment/{{ comment.id }}">Poista</a>
      </p>
      {% endif %}
      {% endfor %}

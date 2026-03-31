@@ -100,6 +100,10 @@ def get_comment(comment_id):
              WHERE comments.id = ? and comments.user_id = users.id"""
     return db.query(sql, [comment_id])
 
+def remove_comment(comment_id):
+    sql = "DELETE FROM comments WHERE id = ?"
+    db.execute(sql, [comment_id])
+
 def get_classes(item_id):
     sql = "SELECT title, value FROM book_classes WHERE book_id = ?"
     return db.query(sql, [item_id])
