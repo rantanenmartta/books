@@ -11,6 +11,7 @@
   </p>
 <input type="hidden" name="comment_id" value="{{ comment.id }}">
 <input type="hidden" name="item_id" value="{{ item.id }}" />
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 <input type="submit" value="Päivitä kommentti" />
 </form>
 {% endblock %}

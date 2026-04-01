@@ -37,6 +37,7 @@
      </select>
    </p>
    {% endfor %}
+   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
    <input type="submit" value="Päivitä kirjan tietoja" />
 </form>
 {% endblock %}

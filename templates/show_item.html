@@ -51,6 +51,7 @@
      Kommentti: <br />
      <textarea name="content" rows="8" cols="60" maxlength="3000" ></textarea>
      <input type="hidden" name="item_id" value="{{ item.id }}">
+     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
    </p>
      <input type="submit" value="Lisää kommentti"/>
 </form>

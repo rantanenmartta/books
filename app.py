@@ -1,3 +1,4 @@
+import secrets
 import sqlite3
 import re
 from flask import Flask
@@ -11,6 +12,12 @@ app.secret_key = config.secret_key
 
 def require_login():
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 @app.route("/")
@@ -55,6 +62,7 @@ def new_item():
 @app.route("/create_item", methods=["POST"])
 def create_item():
     require_login()
+    check_csrf()
 
     book_name = request.form["book_name"]
     if not book_name or len(book_name) > 50:
@@ -110,6 +118,8 @@ def edit_item(item_id):
 @app.route("/update_item", methods=["POST"])
 def update_item():
     require_login()
+    check_csrf()
+
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
@@ -159,6 +169,7 @@ def update_item():
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
     require_login()
+
     item = items.get_item(item_id)
     if not item:
         abort(404)
@@ -169,6 +180,7 @@ def remove_item(item_id):
         return render_template("remove_item.html", item=item)
 
     elif request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
@@ -206,6 +218,7 @@ def edit_comment(comment_id):
 @app.route("/update_comment", methods=["POST"])
 def update_comment():
     require_login()
+    check_csrf()
 
     comment_id = request.form["comment_id"]
     item_id = request.form["item_id"]
@@ -229,6 +242,7 @@ def update_comment():
 @app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
 def remove_comment(comment_id):
     require_login()
+
     comment_all = items.get_comment(comment_id)
 
     if not comment_all:
@@ -245,6 +259,7 @@ def remove_comment(comment_id):
         return render_template("remove_comment.html", comment=comment)
 
     elif request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             items.remove_comment(comment_id)
             return redirect("/item/" + str(item_id))
@@ -257,6 +272,7 @@ def add_image():
     if request.method == "GET":
         return render_template("add_image.html")
     elif request.method == "POST":
+        check_csrf()
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             return "VIRHE: väärä tiedostomuoto"
@@ -311,6 +327,7 @@ def login():
         if user_id:
             session["user_id"]= user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         return "VIRHE: väärä tunnus tai salasana"
 
