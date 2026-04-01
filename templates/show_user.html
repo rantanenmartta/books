@@ -7,6 +7,15 @@
 
 <body>
    <h1>Käyttäjä {{ user.username }}</h1>
+   {% if user.has_image %}
+   <img src="/image/{{ user.id }}" />
+   {% endif %}
+
+   {% if user.id == session.user_id %}
+   <p>
+     <a href="/add_image">Lisää profiilikuva</a>
+   </p>
+   {% endif %}
    <p>
      Käyttäjä on lukenut yhteensä {{ items | count }} kirjaa.
    </p>

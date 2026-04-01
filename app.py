@@ -1,7 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import abort, redirect, render_template, request, session
-from werkzeug.security import generate_password_hash
+from flask import abort, redirect, render_template, request, session, make_response
 import config
 import db
 import items
@@ -96,16 +95,16 @@ def edit_item(item_id):
     item = items.get_item(item_id)
     books = items.get_items()
     if not item:
-         abort(404)
+        abort(404)
     if item["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
     all_classes = items.get_all_classes()
 
     classes = {}
     for my_class in all_classes:
         classes[my_class] = ""
     for entry in items.get_classes(item_id):
-         classes[entry["title"]] = entry["value"]
+        classes[entry["title"]] = entry["value"]
 
     return render_template("edit_item.html", item=item, books=books, classes=classes, all_classes=all_classes)
 
@@ -167,8 +166,8 @@ def remove_item(item_id):
     if item["user_id"] != session["user_id"]:
          abort(403)
     if request.method == "GET":
-    	item = items.get_item(item_id)
-    	return render_template("remove_item.html", item=item)
+        item = items.get_item(item_id)
+        return render_template("remove_item.html", item=item)
 
     if request.method == "POST":
         if "remove" in request.form:
@@ -199,9 +198,9 @@ def edit_comment(comment_id):
     comment_all = items.get_comment(comment_id)
     comment = comment_all[0]
     if not comment_all:
-         abort(404)
+        abort(404)
     if comment["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
     item = items.get_item(comment["book_id"])
     return render_template("edit_comment.html", item=item, comment=comment)
 
@@ -218,7 +217,7 @@ def update_comment():
     comment = comment_all[0]
 
     if comment["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
 
     content = request.form.get("content", "")
     if not content or len(content) > 3000:
@@ -239,7 +238,7 @@ def remove_comment(comment_id):
     item_id = comment["book_id"]
 
     if comment["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
     if request.method == "GET":
         comment_all = items.get_comment(comment_id)
         comment = comment_all[0]
@@ -253,6 +252,34 @@ def remove_comment(comment_id):
         else:
             return redirect("/item/" + str(item_id))
 
+@app.route("/add_image", methods=["GET", "POST"])
+def add_image():
+    require_login()
+
+    if request.method == "GET":
+        return render_template("add_image.html")
+    if request.method == "POST":
+        file = request.files["image"]
+        if not file.filename.endswith(".jpg"):
+            return "VIRHE: väärä tiedostomuoto"
+
+        image = file.read()
+        if len(image) > 100 * 1024:
+            return "VIRHE: liian suuri kuva"
+
+        user_id = session["user_id"]
+        users.update_image(user_id, image)
+        return redirect("/user/" + str(user_id))
+
+@app.route("/image/<int:user_id>")
+def show_image(user_id):
+    image = users.get_image(user_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
 
 @app.route("/register")
 def register():
