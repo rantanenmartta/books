@@ -1,5 +1,5 @@
-import db
 from werkzeug.security import check_password_hash, generate_password_hash
+import db
 
 def get_user(user_id):
     sql = """SELECT id, username, image IS NOT NULL has_image
@@ -27,8 +27,7 @@ def check_login(username, password):
 
     if check_password_hash(password_hash, password):
         return user_id
-    else:
-        return None
+    return None
 
 def update_image(user_id, image):
     sql = "UPDATE users SET image = ? WHERE id = ?"

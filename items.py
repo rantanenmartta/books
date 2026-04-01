@@ -18,8 +18,8 @@ def add_item(book_name, writer_name, pub_year, description, user_id, classes):
     try:
         db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
     except Exception as e:
-       print("DB Error:", e)
-       return "Database error", 400
+        print("DB Error:", e)
+        return "Database error", 400
 
     item_id = db.last_insert_id()
 
@@ -33,7 +33,8 @@ def add_comment(book_id, user_id, content):
     db.execute(sql, [book_id, user_id, content])
 
 def get_comments(item_id):
-    sql = """SELECT comments.id, comments.content, comments.book_id, comments.sent_at, users.id user_id, users.username
+    sql = """SELECT comments.id, comments.content, comments.book_id, 
+            comments.sent_at, users.id user_id, users.username
             FROM comments, users
             WHERE comments.book_id = ? AND comments.user_id = users.id
             ORDER BY comments.id DESC"""
@@ -95,7 +96,8 @@ def update_comment(comment_id, content):
     db.execute(sql, [content, comment_id])
 
 def get_comment(comment_id):
-    sql = """SELECT comments.id, comments.content, comments.book_id, comments.sent_at, comments.user_id, users.id user_id, users.username
+    sql = """SELECT comments.id, comments.content, comments.book_id, 
+            comments.sent_at, comments.user_id, users.id user_id, users.username
             FROM comments, users
             WHERE comments.id = ? and comments.user_id = users.id"""
     return db.query(sql, [comment_id])

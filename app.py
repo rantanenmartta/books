@@ -1,10 +1,9 @@
 import sqlite3
+import re
 from flask import Flask
 from flask import abort, redirect, render_template, request, session, make_response
 import config
-import db
 import items
-import re
 import users
 
 app = Flask(__name__)
@@ -33,8 +32,8 @@ def find_item():
     if query:
         results = items.find_items(query)
     else:
-       query = ""
-       results = []
+        query = ""
+        results = []
     return render_template("find_item.html", query=query, results=results)
 
 @app.route("/item/<int:item_id>")
@@ -116,7 +115,7 @@ def update_item():
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
 
     book_name = request.form["book_name"]
     if not book_name or len(book_name) > 50:
@@ -164,12 +163,12 @@ def remove_item(item_id):
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
-         abort(403)
+        abort(403)
     if request.method == "GET":
         item = items.get_item(item_id)
         return render_template("remove_item.html", item=item)
 
-    if request.method == "POST":
+    elif request.method == "POST":
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
@@ -245,12 +244,11 @@ def remove_comment(comment_id):
 
         return render_template("remove_comment.html", comment=comment)
 
-    if request.method == "POST":
+    elif request.method == "POST":
         if "remove" in request.form:
             items.remove_comment(comment_id)
             return redirect("/item/" + str(item_id))
-        else:
-            return redirect("/item/" + str(item_id))
+        return redirect("/item/" + str(item_id))
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
@@ -258,7 +256,7 @@ def add_image():
 
     if request.method == "GET":
         return render_template("add_image.html")
-    if request.method == "POST":
+    elif request.method == "POST":
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             return "VIRHE: väärä tiedostomuoto"
@@ -314,8 +312,7 @@ def login():
             session["user_id"]= user_id
             session["username"] = username
             return redirect("/")
-        else:
-            return "VIRHE: väärä tunnus tai salasana"
+        return "VIRHE: väärä tunnus tai salasana"
 
 @app.route("/logout")
 def logout():
@@ -323,4 +320,3 @@ def logout():
         del session["user_id"]
         del session["username"]
     return redirect("/")
-
