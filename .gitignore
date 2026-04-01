@@ -6,3 +6,4 @@ database.db.save
 .items.py.swp
 app.py.save
 kaunis.jpg
+*.swp
