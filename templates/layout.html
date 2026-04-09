@@ -9,18 +9,13 @@
 <body>
   <h1>Kirjat</h1>
 
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }}
-  </p>
-  {% endif %}
-
   <p>
     <a href="/">Etusivu</a> |
     <a href="/find_item">Etsi</a> |
   {% if session.user_id %}
     <a href="/new_item">Lisää kirja</a> |
     <a href="/logout">Kirjaudu ulos</a> |
+    <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
   {% else %}
     <a href="/login">Kirjaudu sisään</a> |
     <a href="/register">Luo tunnus</a> |
