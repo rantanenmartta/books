@@ -207,9 +207,9 @@ def edit_comment(comment_id):
     require_login()
 
     comment_all = items.get_comment(comment_id)
-    comment = comment_all[0]
     if not comment_all:
         abort(404)
+    comment = comment_all[0]
     if comment["user_id"] != session["user_id"]:
         abort(403)
     item = items.get_item(comment["book_id"])

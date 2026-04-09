@@ -33,7 +33,7 @@ def add_comment(book_id, user_id, content):
     db.execute(sql, [book_id, user_id, content])
 
 def get_comments(item_id):
-    sql = """SELECT comments.id, comments.content, comments.book_id, 
+    sql = """SELECT comments.id, comments.content, comments.book_id,
             comments.sent_at, users.id user_id, users.username
             FROM comments, users
             WHERE comments.book_id = ? AND comments.user_id = users.id
@@ -41,7 +41,11 @@ def get_comments(item_id):
     return db.query(sql, [item_id])
 
 def get_items():
-    sql = "SELECT id, book_name FROM books ORDER BY id DESC"
+    sql = """SELECT books.id, books.book_name, users.id user_id, users.username, COUNT(comments.id) com_count
+             FROM books JOIN users ON books.user_id = users.id
+                        LEFT JOIN comments ON books.id = comments.book_id
+             GROUP BY books.id
+             ORDER BY books.id DESC"""
 
     return db.query(sql)
 
