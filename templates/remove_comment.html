@@ -3,7 +3,8 @@
 {% block title %}Kommentin poisto{% endblock %}
 
 {% block content %}
-<h2>Kommentin poisto</h2>
+<h2>{{ item.book_name }}</h2>
+<h3>Kommentin poisto</h3>
 <p>Kommentti: {{ comment.content }}</p>
 <p>Haluatko varmasti poistaa tämän kommentin?</p>
 <form action="/remove_comment/{{ comment.id }}" method="post">

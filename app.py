@@ -258,8 +258,9 @@ def remove_comment(comment_id):
     if request.method == "GET":
         comment_all = items.get_comment(comment_id)
         comment = comment_all[0]
+        item = items.get_item(comment["book_id"])
 
-        return render_template("remove_comment.html", comment=comment)
+        return render_template("remove_comment.html", comment=comment, item=item)
 
     elif request.method == "POST":
         check_csrf()

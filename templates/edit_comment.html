@@ -3,7 +3,8 @@
 {% block title %}Kommentin muokkaus{% endblock %}
 
 {% block content %}
-<h2>Kommentin muokkaus</h2>
+<h2>{{ item.book_name }}</h2>
+<h3>Kommentin muokkaus</h3>
 <form action="/update_comment" method="post">
   <p>
     Kommentti: <br />
@@ -14,4 +15,7 @@
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
 <input type="submit" value="Päivitä kommentti" />
 </form>
+<p>
+  <a href="/item/{{ item.id }}">Palaa takaisin</a>
+</p>
 {% endblock %}

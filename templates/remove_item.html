@@ -3,8 +3,8 @@
 {% block title %}Kirjan poisto{% endblock %}
 
 {% block content %}
-<h2>Kirjan poisto</h2>
-<p>Kirja: {{ item.book_name }}</p>
+<h2>{{ item.book_name }}<h2>
+<h3>Kirjan poisto</h3>
 <p>Haluatko varmasti poistaa tämän kirjan?</p>
 <form action="/remove_item/{{ item.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
