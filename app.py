@@ -6,6 +6,7 @@ from flask import abort, redirect, render_template, request, session, make_respo
 import config
 import items
 import users
+import db
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -94,7 +95,9 @@ def create_item():
 
     items.add_item(book_name, writer_name, pub_year, description, user_id, classes)
 
-    return redirect("/")
+    item_id = db.last_insert_id()
+
+    return redirect("/item/" + str(item_id))
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
