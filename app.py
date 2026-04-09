@@ -2,7 +2,7 @@ import secrets
 import sqlite3
 import re
 from flask import Flask
-from flask import abort, redirect, render_template, request, session, make_response
+from flask import abort, flash, redirect, render_template, request, session, make_response
 import config
 import items
 import users
@@ -278,14 +278,16 @@ def add_image():
     elif request.method == "POST":
         check_csrf()
         file = request.files["image"]
+        user_id = session["user_id"]
         if not file.filename.endswith(".jpg"):
-            return "VIRHE: väärä tiedostomuoto"
+            flash("VIRHE: väärä tiedostomuoto")
+            return redirect("/user/" + str(user_id))
 
         image = file.read()
         if len(image) > 100 * 1024:
-            return "VIRHE: liian suuri kuva"
+            flash("VIRHE: liian suuri kuva")
+            return redirect("/user/" + str(user_id))
 
-        user_id = session["user_id"]
         users.update_image(user_id, image)
         return redirect("/user/" + str(user_id))
 
@@ -302,21 +304,22 @@ def show_image(user_id):
 @app.route("/register")
 def register():
     return render_template("register.html")
-
 @app.route("/create", methods=["POST"])
 def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: salasanat eivät ole samat")
+        return redirect("/register")
 
     try:
         users.create_user(username, password1)
     except sqlite3.IntegrityError:
-        return "VIRHE: Tunnus on jo varattu"
+        flash("VIRHE: tunnus on jo varattu")
+        return redirect("/register")
 
-    return "Tunnus luotu"
+    return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -333,7 +336,9 @@ def login():
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        return "VIRHE: väärä tunnus tai salasana"
+        else:
+            flash("VIRHE: väärä tunnus tai salasana")
+            return redirect("/login")
 
 @app.route("/logout")
 def logout():
