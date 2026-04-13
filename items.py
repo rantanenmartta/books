@@ -43,11 +43,12 @@ def get_comments(item_id):
     return db.query(sql, [item_id])
 
 def get_items():
-    sql = """SELECT books.id, books.book_name, users.id user_id, users.username, COUNT(comments.id) com_count
-             FROM books JOIN users ON books.user_id = users.id
-                        LEFT JOIN comments ON books.id = comments.book_id
-             GROUP BY books.id
-             ORDER BY books.id DESC"""
+    sql = """SELECT books.id, books.book_name, users.id user_id,
+            users.username, COUNT(comments.id) com_count
+            FROM books JOIN users ON books.user_id = users.id
+            LEFT JOIN comments ON books.id = comments.book_id
+            GROUP BY books.id
+            ORDER BY books.id DESC"""
 
     return db.query(sql)
 
@@ -61,15 +62,15 @@ def get_item(item_id):
                     u.username
             FROM books b, users u
             WHERE b.user_id = u.id AND
-                b.id = ?"""
+            b.id = ?"""
     result = db.query(sql, [item_id])
     return result[0] if result else None
 
 def update_item(item_id, book_name, writer_name, pub_year, description, classes):
     sql = """UPDATE books SET book_name = ?,
-                            writer_name = ?,
-                            pub_year = ?,
-                            description = ?
+                        writer_name = ?,
+                        pub_year = ?,
+                        description = ?
                         WHERE id = ?"""
     db.execute(sql, [book_name, writer_name, pub_year, description, item_id])
 
@@ -93,9 +94,9 @@ def remove_item(item_id):
 
 def find_items(query):
     sql = """SELECT id, book_name
-             FROM books
-             WHERE book_name LIKE ? or writer_name LIKE ? or pub_year LIKE ? or description LIKE ?
-             ORDER BY id DESC"""
+            FROM books
+            WHERE book_name LIKE ? or writer_name LIKE ? or pub_year LIKE ? or description LIKE ?
+            ORDER BY id DESC"""
     like = "%" + query + "%"
     return db.query(sql, [like, like, like, like])
 
@@ -105,7 +106,7 @@ def update_comment(comment_id, content):
     db.execute(sql, [content, comment_id])
 
 def get_comment(comment_id):
-    sql = """SELECT comments.id, comments.content, comments.book_id, 
+    sql = """SELECT comments.id, comments.content, comments.book_id,
             comments.sent_at, comments.user_id, users.id user_id, users.username
             FROM comments, users
             WHERE comments.id = ? and comments.user_id = users.id"""

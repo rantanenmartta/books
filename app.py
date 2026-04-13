@@ -38,8 +38,8 @@ def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    items = users.get_items(user_id)
-    return render_template("show_user.html", user=user, items=items)
+    user_items = users.get_items(user_id)
+    return render_template("show_user.html", user=user, items=user_items)
 
 @app.route("/find_item")
 def find_item():
@@ -121,7 +121,8 @@ def edit_item(item_id):
     for entry in items.get_classes(item_id):
         classes[entry["title"]] = entry["value"]
 
-    return render_template("edit_item.html", item=item, books=books, classes=classes, all_classes=all_classes)
+    return render_template("edit_item.html", item=item, books=books,
+                           classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -177,13 +178,12 @@ def remove_item(item_id):
         item = items.get_item(item_id)
         return render_template("remove_item.html", item=item)
 
-    elif request.method == "POST":
+    if request.method == "POST":
         check_csrf()
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
-        else:
-            return redirect("/item/" + str(item_id))
+        return redirect("/item/" + str(item_id))
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
@@ -257,7 +257,7 @@ def remove_comment(comment_id):
 
         return render_template("remove_comment.html", comment=comment, item=item)
 
-    elif request.method == "POST":
+    if request.method == "POST":
         check_csrf()
         if "remove" in request.form:
             items.remove_comment(comment_id)
@@ -270,7 +270,7 @@ def add_image():
 
     if request.method == "GET":
         return render_template("add_image.html")
-    elif request.method == "POST":
+    if request.method == "POST":
         check_csrf()
         file = request.files["image"]
         user_id = session["user_id"]
