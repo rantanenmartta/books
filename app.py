@@ -3,11 +3,11 @@ import sqlite3
 import re
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session, make_response
+import markupsafe
 import config
 import items
 import users
 import db
-import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
