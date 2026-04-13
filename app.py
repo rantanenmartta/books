@@ -100,9 +100,7 @@ def create_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    items.add_item(book_name, writer_name, pub_year, description, user_id, classes)
-
-    item_id = db.last_insert_id()
+    item_id = items.add_item(book_name, writer_name, pub_year, description, user_id, classes)
 
     return redirect("/item/" + str(item_id))
 
@@ -151,16 +149,6 @@ def update_item():
         abort(403)
 
     all_classes = items.get_all_classes()
-
-    classes = []
-    for entry in request.form.getlist("classes"):
-        if entry:
-            title, value = entry.split(":")
-            if title not in all_classes:
-                abort(403)
-            if value not in all_classes[title]:
-                abort(403)
-            classes.append((title, value))
 
     classes = []
     for entry in request.form.getlist("classes"):

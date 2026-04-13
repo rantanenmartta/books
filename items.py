@@ -27,6 +27,8 @@ def add_item(book_name, writer_name, pub_year, description, user_id, classes):
     for title, value in classes:
         db.execute(sql, [item_id, title, value])
 
+    return item_id
+
 def add_comment(book_id, user_id, content):
     sql = """INSERT INTO comments (book_id, user_id, content, sent_at) VALUES
             (?, ?, ?, datetime('now'))"""
