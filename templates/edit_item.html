@@ -22,6 +22,10 @@
      <label for="descriptoin">Kuvaus:</label> <br />
      <textarea name="description" id="description" rows="8" cols="60" maxlength="1500" required>{{ item.description }}</textarea>
    </p>
+   <p>
+     <label for="read_year">Lukuvuosi:</label> <br />
+     <input type="number" name="read_year" id="read_year" value="{{ item.read_year }}" min="1900" max="2100" />
+   </p>
    <input type="hidden" name="item_id" value="{{ item.id }}" />
    {% for class in all_classes %}
    <p>

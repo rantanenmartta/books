@@ -174,6 +174,9 @@ def update_item():
     description = request.form.get("description", "")
     if not description or len(description) > 1500:
         abort(403)
+    read_year = request.form["read_year"]
+    if not read_year or int(read_year) < 1900 or int(read_year) > 2100:
+        abort(403)
 
     all_classes = items.get_all_classes()
 
@@ -187,7 +190,7 @@ def update_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    items.update_item(item_id, book_name, writer_name, pub_year, description, classes)
+    items.update_item(item_id, book_name, writer_name, pub_year, description, read_year, classes)
 
     return redirect("/item/" + str(item_id))
 

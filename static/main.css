@@ -1,3 +1,4 @@
+
 body {
   margin: auto;
   max-width: 50em;
@@ -23,4 +24,11 @@ body {
   border: 2px solid black;
   margin: 1em;
   padding: 0.2em 0.5em;
+}
+
+.user_books {
+  border: 2px solid black;
+  margin: 1em;
+  padding: 0.2em 0.5em;
+  width: 300px
 }

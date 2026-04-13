@@ -64,6 +64,7 @@ def books_grouped_by_year(user_id):
             GROUP BY read_year
             ORDER BY read_year DESC"""
     return db.query(sql, [user_id])
+
 def get_items(page, page_size):
     sql = """SELECT books.id, books.book_name, users.id user_id,
             users.username, COUNT(comments.id) com_count
@@ -92,13 +93,14 @@ def get_item(item_id):
     result = db.query(sql, [item_id])
     return result[0] if result else None
 
-def update_item(item_id, book_name, writer_name, pub_year, description, classes):
+def update_item(item_id, book_name, writer_name, pub_year, description, read_year, classes):
     sql = """UPDATE books SET book_name = ?,
                         writer_name = ?,
                         pub_year = ?,
-                        description = ?
+                        description = ?,
+                        read_year = ?
                         WHERE id = ?"""
-    db.execute(sql, [book_name, writer_name, pub_year, description, item_id])
+    db.execute(sql, [book_name, writer_name, pub_year, description, read_year, item_id])
 
     sql = "DELETE FROM book_classes WHERE book_id = ?"
     db.execute(sql, [item_id])
