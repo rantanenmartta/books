@@ -15,7 +15,7 @@
 {% endif %}
 
 <p>
-   Käyttäjä on lukenut yhteensä {{ items | count }} {{"kirjan" if items|count == 1 else "kirjaa"}}.
+   {{ user.username }} on lukenut yhteensä {{ items | count }} {{"kirjan" if items|count == 1 else "kirjaa"}}.
 </p>
 
 <h4>Lukutilasto vuosittain</h4>
