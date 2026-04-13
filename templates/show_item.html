@@ -32,29 +32,38 @@
 </p>
 {% endif %}
 
-<h3>Kommentit</h3>
-<ul>
-   {% for comment in comments %}
-
-   <li>{{ comment.content | show_lines }} <a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})</li>
-   {% if session.user_id == comment.user_id %}
-   <p>
-     <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
-     <a href="/remove_comment/{{ comment.id }}">Poista</a>
-   </p>
-   {% endif %}
-   {% endfor %}
-</ul>
 {% if session.user_id %}
 <h3>Uusi kommentti</h3>
    <form action="/create_comment" method="post">
    <p>
      <label for="content">Kommentti:</label> <br />
-     <textarea name="content" id="content" rows="8" cols="60" maxlength="3000" ></textarea>
+     <textarea name="content" id="content" rows="8" cols="60" maxlength="1500" ></textarea>
      <input type="hidden" name="item_id" value="{{ item.id }}">
      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
    </p>
      <input type="submit" value="Lisää kommentti"/>
 </form>
 {% endif %}
+
+<h3 id="comments">Kommentit</h3>
+{% for comment in comments %}
+<div class="comment">
+<p>
+{{ comment.content | show_lines }}
+</p>
+<a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})
+{% if session.user_id == comment.user_id %}
+<p>
+  <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
+  <a href="/remove_comment/{{ comment.id }}">Poista</a>
+</p>
+{% endif %}
+</div>
+{% endfor %}
+<p>
+  <a href="/item/{{ item.id }}?page={{ page - 1 }}#comments">&lt;&lt;</a>
+  Sivu {{ page }}/{{ page_count }}
+  <a href="/item/{{ item.id }}?page={{ page + 1 }}#comments">&gt;&gt;</a>
+</p>
+
 {% endblock %}

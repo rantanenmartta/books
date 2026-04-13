@@ -1,6 +1,4 @@
-import secrets
-import sqlite3
-import re
+import secrets, sqlite3, math, re
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session, make_response
 import markupsafe
@@ -29,9 +27,19 @@ def show_lines(content):
     return markupsafe.Markup(content)
 
 @app.route("/")
-def index():
-    all_items = items.get_items()
-    return render_template("index.html", items=all_items)
+@app.route("/<int:page>")
+def index(page=1):
+    page_size = 10
+    book_count = items.book_count()
+    page_count = math.ceil(book_count / page_size)
+    page_count = max(page_count, 1)
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    all_items = items.get_items(page, page_size)
+    return render_template("index.html", page=page, page_count=page_count, items=all_items)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
@@ -56,9 +64,23 @@ def show_item(item_id):
     item = items.get_item(item_id)
     if not item:
         abort(404)
+
+    page = request.args.get("page", 1, type=int)
+    if page < 1:
+        page = 1
+    page_size = 5
+
     classes = items.get_classes(item_id)
-    comments = items.get_comments(item_id)
-    return render_template("show_item.html", item=item, classes=classes, comments=comments)
+    total = items.comment_count(item_id)
+
+    page_count = max((total + page_size - 1) // page_size, 1)
+
+    if page > page_count:
+        page = page_count
+
+    comments = items.get_comments(item_id, page, page_size)
+
+    return render_template("show_item.html", item=item, classes=classes, comments=comments, page=page, page_count=page_count)
 
 @app.route("/new_item")
 def new_item():
@@ -188,6 +210,7 @@ def remove_item(item_id):
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
     require_login()
+    check_csrf()
 
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
@@ -196,6 +219,8 @@ def create_comment():
     user_id = session["user_id"]
     content = request.form.get("content", "")
 
+    if not content or len(content) > 1500:
+        abort(403)
     items.add_comment(item_id, user_id, content)
 
     return redirect("/item/" + str(item_id))
@@ -230,7 +255,7 @@ def update_comment():
         abort(403)
 
     content = request.form.get("content", "")
-    if not content or len(content) > 3000:
+    if not content or len(content) > 1500:
         abort(403)
 
     items.update_comment(comment_id, content)

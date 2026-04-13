@@ -34,23 +34,37 @@ def add_comment(book_id, user_id, content):
             (?, ?, ?, datetime('now'))"""
     db.execute(sql, [book_id, user_id, content])
 
-def get_comments(item_id):
+def get_comments(item_id, page, page_size):
     sql = """SELECT comments.id, comments.content, comments.book_id,
             comments.sent_at, users.id user_id, users.username
             FROM comments, users
             WHERE comments.book_id = ? AND comments.user_id = users.id
-            ORDER BY comments.id DESC"""
-    return db.query(sql, [item_id])
+            ORDER BY comments.id DESC
+            LIMIT ? OFFSET ? """
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [item_id, limit, offset])
 
-def get_items():
+def book_count():
+    sql = "SELECT COUNT(*) FROM books"
+    return db.query(sql)[0][0]
+
+def comment_count(item_id):
+    sql = "SELECT IFNULL(COUNT(*),0) FROM comments WHERE book_id = ?"
+    return db.query(sql, [item_id])[0][0]
+
+def get_items(page, page_size):
     sql = """SELECT books.id, books.book_name, users.id user_id,
             users.username, COUNT(comments.id) com_count
             FROM books JOIN users ON books.user_id = users.id
             LEFT JOIN comments ON books.id = comments.book_id
             GROUP BY books.id
-            ORDER BY books.id DESC"""
+            ORDER BY books.id DESC
+            LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
 
-    return db.query(sql)
+    return db.query(sql, [limit, offset])
 
 def get_item(item_id):
     sql = """SELECT b.id,
