@@ -12,14 +12,14 @@ def get_all_classes():
 
     return classes
 
-def add_item(book_name, writer_name, pub_year, description, user_id, classes):
-    sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id)
-             VALUES (?, ?, ?, ?, ?)"""
+def add_item(book_name, writer_name, pub_year, description, user_id, read_year, classes):
+    sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id, read_year)
+             VALUES (?, ?, ?, ?, ?, ?)"""
     try:
-        db.execute(sql, [book_name, writer_name, pub_year, description, user_id])
+        db.execute(sql, [book_name, writer_name, pub_year, description, user_id, read_year])
     except Exception as e:
         print("DB Error:", e)
-        return "Database error", 400
+        abort(400)
 
     item_id = db.last_insert_id()
 
@@ -53,6 +53,17 @@ def comment_count(item_id):
     sql = "SELECT IFNULL(COUNT(*),0) FROM comments WHERE book_id = ?"
     return db.query(sql, [item_id])[0][0]
 
+def count_books_by_year(user_id, year):
+    sql = "SELECT COUNT(*) FROM books WHERE user_id = ? AND read_year = ?"
+    return db.query(sql, [user_id, year])[0][0]
+
+def books_grouped_by_year(user_id):
+    sql = """SELECT read_year, COUNT(*) AS count
+            FROM books
+            WHERE user_id = ? AND read_year IS NOT NULL
+            GROUP BY read_year
+            ORDER BY read_year DESC"""
+    return db.query(sql, [user_id])
 def get_items(page, page_size):
     sql = """SELECT books.id, books.book_name, users.id user_id,
             users.username, COUNT(comments.id) com_count
@@ -72,6 +83,7 @@ def get_item(item_id):
                     b.writer_name,
                     b.pub_year,
                     b.description,
+                    b.read_year,
                     u.id user_id,
                     u.username
             FROM books b, users u
@@ -109,10 +121,10 @@ def remove_item(item_id):
 def find_items(query):
     sql = """SELECT id, book_name
             FROM books
-            WHERE book_name LIKE ? or writer_name LIKE ? or pub_year LIKE ? or description LIKE ?
+            WHERE book_name LIKE ? or writer_name LIKE ? or pub_year LIKE ? or description LIKE ? or read_year LIKE ?
             ORDER BY id DESC"""
     like = "%" + query + "%"
-    return db.query(sql, [like, like, like, like])
+    return db.query(sql, [like, like, like, like, like])
 
 
 def update_comment(comment_id, content):

@@ -6,16 +6,31 @@
 <h2>Käyttäjä {{ user.username }}</h2>
 {% if user.has_image %}
 <img src="/image/{{ user.id }}" alt="Käyttäjän {{ user.username }} profiilikuva" />
-{% endif %}
-
-{% if user.id == session.user_id %}
-<p>
-<a href="/add_image">Lisää profiilikuva</a>
+{% else %}
+   {% if user.id == session.user_id %}
+   <p>
+     <a href="/add_image">Lisää profiilikuva</a>
    </p>
    {% endif %}
+{% endif %}
+
+<p>
+   Käyttäjä on lukenut yhteensä {{ items | count }} {{"kirjan" if items|count == 1 else "kirjaa"}}.
+</p>
+
+<h4>Lukutilasto vuosittain</h4>
+<ul>
+{% for row in year_counts %}
+   {% if row[1] == 1 %}
+   <li>{{ row[0] }}: {{ row[1] }} kirja</li>
+   {% else %}
+   <li>{{ row[0] }}: {{ row[1] }} kirjaa</li>
+   {% endif %}
+{% else %}
    <p>
-     Käyttäjä on lukenut yhteensä {{ items | count }} kirjaa.
    </p>
+{% endfor %}
+</ul>
 <h3>Luetut kirjat</h3>
 <ul>
    {% for item in items %}

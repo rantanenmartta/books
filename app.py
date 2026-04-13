@@ -47,7 +47,8 @@ def show_user(user_id):
     if not user:
         abort(404)
     user_items = users.get_items(user_id)
-    return render_template("show_user.html", user=user, items=user_items)
+    year_counts = items.books_grouped_by_year(user_id)
+    return render_template("show_user.html", user=user, items=user_items, year_counts=year_counts)
 
 @app.route("/find_item")
 def find_item():
@@ -108,6 +109,10 @@ def create_item():
     if not description or len(description) > 1500:
         abort(403)
 
+    read_year = request.form["read_year"]
+    if not read_year or int(read_year) < 1900 or int(read_year) > 2100:
+        abort(403)
+
     user_id = session["user_id"]
 
     all_classes = items.get_all_classes()
@@ -122,7 +127,7 @@ def create_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    item_id = items.add_item(book_name, writer_name, pub_year, description, user_id, classes)
+    item_id = items.add_item(book_name, writer_name, pub_year, description, user_id, read_year, classes)
 
     return redirect("/item/" + str(item_id))
 
@@ -130,7 +135,6 @@ def create_item():
 def edit_item(item_id):
     require_login()
     item = items.get_item(item_id)
-    books = items.get_items()
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -143,7 +147,7 @@ def edit_item(item_id):
     for entry in items.get_classes(item_id):
         classes[entry["title"]] = entry["value"]
 
-    return render_template("edit_item.html", item=item, books=books,
+    return render_template("edit_item.html", item=item,
                            classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])

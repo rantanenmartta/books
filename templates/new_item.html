@@ -21,6 +21,10 @@
     <label for="description">Kuvaus:</label> <br />
     <textarea name="description" id="description" rows="8" cols="60" maxlength="1500" required ></textarea>
   </p>
+  <p>
+    <label for="read_year">Lukuvuosi:</label> <br />
+    <input type="number" name="read_year" min="1900" max="2100">
+  </p>
   {% for class in classes %}
   <p>
     <label for="class{{ class }}">{{ class }}:</label> <br />

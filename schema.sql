@@ -8,10 +8,11 @@ CREATE TABLE users (
 CREATE TABLE books (
     id INTEGER PRIMARY KEY,
     book_name TEXT,
-    writer_name TEXT,    --change to references writers, use id here
+    writer_name TEXT,
     pub_year INTEGER,
     description TEXT,
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users,
+    read_year INTEGER
 );
 
 CREATE TABLE comments (
