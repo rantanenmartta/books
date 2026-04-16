@@ -1,11 +1,14 @@
-import secrets, sqlite3, math, re
+import secrets
+import sqlite3
+import math
+import re
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session, make_response
 import markupsafe
 import config
 import items
 import users
-import db
+#import db
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -67,8 +70,7 @@ def show_item(item_id):
         abort(404)
 
     page = request.args.get("page", 1, type=int)
-    if page < 1:
-        page = 1
+    page = max(page, 1)
     page_size = 5
 
     classes = items.get_classes(item_id)
@@ -76,12 +78,12 @@ def show_item(item_id):
 
     page_count = max((total + page_size - 1) // page_size, 1)
 
-    if page > page_count:
-        page = page_count
+    page = min(page, page_count)
 
     comments = items.get_comments(item_id, page, page_size)
 
-    return render_template("show_item.html", item=item, classes=classes, comments=comments, page=page, page_count=page_count)
+    return render_template("show_item.html", item=item, classes=classes,
+                        comments=comments, page=page, page_count=page_count)
 
 @app.route("/new_item")
 def new_item():
@@ -127,7 +129,8 @@ def create_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    item_id = items.add_item(book_name, writer_name, pub_year, description, user_id, read_year, classes)
+    item_id = items.add_item(book_name, writer_name, pub_year,
+                            description, user_id, read_year, classes)
 
     return redirect("/item/" + str(item_id))
 
