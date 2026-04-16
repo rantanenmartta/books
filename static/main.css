@@ -6,6 +6,12 @@ body {
   background-color: lavenderblush;
 }
 
+.nav {
+  background-color: peachpuff;
+  padding: 0.5em;
+  margin: 0.5em 0;
+}
+
 .book {
   border: 2px solid black;
   margin: 1em;
