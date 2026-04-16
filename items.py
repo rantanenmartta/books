@@ -148,3 +148,7 @@ def remove_comment(comment_id):
 def get_classes(item_id):
     sql = "SELECT title, value FROM book_classes WHERE book_id = ?"
     return db.query(sql, [item_id])
+
+def remove_image(user_id):
+    sql = "UPDATE users SET IMAGE = NULL WHERE id = ?"
+    db.execute(sql, [user_id])

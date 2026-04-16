@@ -328,6 +328,17 @@ def show_image(user_id):
     response.headers.set("Content-Type", "image/jpeg")
     return response
 
+@app.route("/remove_image", methods=["POST"])
+def remove_image():
+    require_login()
+    check_csrf()
+
+    user_id = session["user_id"]
+    if "remove" in request.form:
+        items.remove_image(user_id)
+        flash("Profiilikuva poistettu")
+    return redirect("/user/" + str(user_id))
+
 @app.route("/register")
 def register():
     return render_template("register.html")
