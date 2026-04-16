@@ -2,7 +2,7 @@ CREATE TABLE users (
 	id INTEGER PRIMARY KEY, 
 	username TEXT UNIQUE,
 	password_hash TEXT
-        image BLOB
+    image BLOB
 );
 
 CREATE TABLE books (
