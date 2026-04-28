@@ -6,44 +6,44 @@
 <h2>{{ item.book_name }}</h2>
 <h3>Kirjan muokkaus</h3>
 <form action="/update_item" method="post">
-   <p>
-     <label for="book_name">Kirjan nimi:</label> <br />
-     <input type="text" name="book_name" id="book_name" value="{{ item.book_name }}" maxlength="50" required />
-   </p>
-   <p>
-     <label for="writer_name">Kirjailijan nimi:</label> <br />
-     <input type="text" name="writer_name" id="writer_name" value="{{ item.writer_name }}" maxlength="50" required />
-   </p>
-   <p>
-     <label for="pub_year">Julkaisuvuosi:</label> <br />
-     <input type="text" name="pub_year" id="pub_year" maxlength="4" value="{{ item.pub_year }}" pattern="[1-9][0-9]{0,4}" required />
-   </p>
-   <p>
-     <label for="descriptoin">Kuvaus:</label> <br />
-     <textarea name="description" id="description" rows="8" cols="60" maxlength="1500" required>{{ item.description }}</textarea>
-   </p>
-   <p>
-     <label for="read_year">Lukuvuosi:</label> <br />
-     <input type="number" name="read_year" id="read_year" value="{{ item.read_year }}" min="1900" max="2100" required />
-   </p>
-   <input type="hidden" name="item_id" value="{{ item.id }}" />
-   {% for class in all_classes %}
-   <p>
-     <label for="class{{ class }}">{{ class }}:</label> <br />
-     <select name="classes" id="class{{ class }}">
-        <option value="">(valitse)</option>
-     {% for option in all_classes[class] %}
-       {% if classes[class] == option %}
-       <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
-       {% else %}
-       <option value="{{ class }}:{{ option }}">{{ option }}</option>
-       {% endif %}
-     {% endfor %}
-     </select>
-   </p>
-   {% endfor %}
-   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-   <input type="submit" value="Päivitä kirjan tietoja" />
+  <p>
+    <label for="book_name">Kirjan nimi:</label> <br />
+    <input type="text" name="book_name" id="book_name" value="{{ item.book_name }}" maxlength="50" required />
+  </p>
+  <p>
+    <label for="writer_name">Kirjailijan nimi:</label> <br />
+    <input type="text" name="writer_name" id="writer_name" value="{{ item.writer_name }}" maxlength="50" required />
+  </p>
+  <p>
+    <label for="pub_year">Julkaisuvuosi:</label> <br />
+    <input type="text" name="pub_year" id="pub_year" maxlength="4" value="{{ item.pub_year }}" pattern="[1-9][0-9]{0,4}" required />
+  </p>
+  <p>
+    <label for="descriptoin">Kuvaus:</label> <br />
+    <textarea name="description" id="description" rows="8" cols="60" maxlength="1500" required>{{ item.description }}</textarea>
+  </p>
+  <p>
+    <label for="read_year">Lukuvuosi:</label> <br />
+    <input type="number" name="read_year" id="read_year" value="{{ item.read_year }}" min="1900" max="2100" required />
+  </p>
+  <input type="hidden" name="item_id" value="{{ item.id }}" />
+  {% for class in all_classes %}
+  <p>
+    <label for="class{{ class }}">{{ class }}:</label> <br />
+    <select name="classes" id="class{{ class }}">
+      <option value="">(valitse)</option>
+    {% for option in all_classes[class] %}
+      {% if classes[class] == option %}
+        <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+      {% else %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      {% endif %}
+    {% endfor %}
+    </select>
+  </p>
+  {% endfor %}
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="submit" value="Päivitä kirjan tietoja" />
 </form>
 <p>
   <a href="/item/{{ item.id }}">Palaa takaisin</a>

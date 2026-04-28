@@ -42,15 +42,15 @@
 
 {% if session.user_id %}
 <h3>Uusi kommentti</h3>
-   <form action="/create_comment" method="post">
-   <p>
-     <label for="content">Kommentti:</label> <br />
-     <textarea name="content" id="content" rows="8" cols="60" maxlength="1500" required ></textarea>
-     <input type="hidden" name="item_id" value="{{ item.id }}">
-     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-   </p>
-     <input type="submit" value="Lisää kommentti"/>
-</form>
+  <form action="/create_comment" method="post">
+    <p>
+      <label for="content">Kommentti:</label> <br />
+      <textarea name="content" id="content" rows="8" cols="60" maxlength="1500" required ></textarea>
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    </p>
+    <input type="submit" value="Lisää kommentti"/>
+  </form>
 {% endif %}
 
 <h3 id="comments">Kommentit</h3>
@@ -58,7 +58,7 @@
     {% for comment in comments %}
     <div class="comment">
     <p>
-     {{ comment.content | show_lines }}
+      {{ comment.content | show_lines }}
     </p>
     <a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})
     {% if session.user_id == comment.user_id %}
@@ -71,7 +71,7 @@
     {% endfor %}
 {% else %}
 <p>
-   Ei kommentteja.
+  Ei kommentteja.
 </p>
 {% endif %}
 <p>

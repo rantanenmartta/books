@@ -2,27 +2,27 @@
 <html>
 
 <head>
-   <title>{% block title %}{% endblock %}</title>
-   <link rel="stylesheet" href="/static/main.css">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
- <div class="nav">
-  <h1>Kirjat</h1>
+  <div class="nav">
+    <h1>Kirjat</h1>
 
-  <p>
-    <a href="/">Etusivu</a> |
-    <a href="/find_item">Etsi</a> |
-  {% if session.user_id %}
-    <a href="/new_item">Lisää kirja</a> |
-    <a href="/logout">Kirjaudu ulos</a> |
-    <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
-  {% else %}
-    <a href="/login">Kirjaudu sisään</a> |
-    <a href="/register">Luo tunnus</a> |
-  {% endif %}
-  </p>
- </div>
+    <p>
+      <a href="/">Etusivu</a> |
+      <a href="/find_item">Etsi</a> |
+    {% if session.user_id %}
+      <a href="/new_item">Lisää kirja</a> |
+      <a href="/logout">Kirjaudu ulos</a> |
+      <a href="/user/{{ session.user_id }}">{{ session.username }}</a>
+    {% else %}
+      <a href="/login">Kirjaudu sisään</a> |
+      <a href="/register">Luo tunnus</a> |
+    {% endif %}
+    </p>
+  </div>
 
   {% for message in get_flashed_messages() %}
   <div class="info">
