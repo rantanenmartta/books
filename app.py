@@ -83,7 +83,7 @@ def show_item(item_id):
     comments = items.get_comments(item_id, page, page_size)
 
     return render_template("show_item.html", item=item, classes=classes,
-                        comments=comments, page=page, page_count=page_count)
+                    comments=comments, page=page, page_count=page_count)
 
 @app.route("/new_item")
 def new_item():
@@ -151,7 +151,7 @@ def edit_item(item_id):
         classes[entry["title"]] = entry["value"]
 
     return render_template("edit_item.html", item=item,
-                           classes=classes, all_classes=all_classes)
+                            classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():

@@ -3,8 +3,8 @@ import db
 
 def get_user(user_id):
     sql = """SELECT id, username, image IS NOT NULL has_image
-            FROM users
-            WHERE id = ?"""
+        FROM users
+        WHERE id = ?"""
     result = db.query(sql, [user_id])
     return result[0] if result else None
 
