@@ -93,8 +93,8 @@ Muutamia kommentteja tulee siitä, kuinka funktio saattaa olla palauttamatta arv
 ```
 app.py:199:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-r
 ```
-Jokainen näistä kommenttien tilanteista liittyy kuitenkin funktioihin, joissa funktio käsittelee metodit GET ja POST mutta ei muita metodeja.
-Esimerkiksi remove_item()-funktiossa:
+Jokainen näistä kommenttien tilanteista liittyy kuitenkin funktioihin, joissa funktio käsittelee metodit `GET` ja `POST` mutta ei muita metodeja.
+Esimerkiksi `remove_item()`-funktiossa:
 
 ```
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
@@ -118,18 +118,18 @@ def remove_item(item_id):
             return redirect("/")
         return redirect("/item/" + str(item_id))
 ```
-Funktio palauttaa arvon, kun request.method on GET tai POST. Funktion dekoraattori vaatii, että funktion metodi on joko
-GET tai POST, joten ei todellisuudessa ole riskiä, että funktio ei menisi if-haaraan ja palauttaisi mitään arvoa.
+Funktio palauttaa arvon, kun request.method on `GET` tai `POST`. Funktion dekoraattori vaatii, että funktion metodi on joko
+`GET` tai `POST`, joten ei todellisuudessa ole riskiä, että funktio ei menisi `if`-haaraan ja palauttaisi mitään arvoa.
 
 
 # Turha else-haara
 
-Raportissa on yksi ilmoitus ylimääräisestä else-haarasta:
+Raportissa on yksi ilmoitus ylimääräisestä `else`-haarasta:
 
 ```
 app.py:391:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
 ```
-Kyseessä on login()-funktion koodi:
+Kyseessä on `login()`-funktion koodi:
 ```
 if user_id:
             session["user_id"]= user_id
@@ -150,7 +150,7 @@ if user_id:
 flash("VIRHE: väärä tunnus tai salasana")
 return redirect("/login")
 ```
-Kuitenkin selkeyden vuoksi olen käyttänyt else-haaraa, jotta koodista käy selkeämmin esiin eri tilanteet.
+Kuitenkin selkeyden vuoksi olen käyttänyt `else`-haaraa, jotta koodista käy selkeämmin esiin eri tilanteet.
 
 
 # Vaarallinen oletusarvo
@@ -167,11 +167,11 @@ def execute(sql, params=[]):
     g.last_insert_id = result.lastrowid
     con.close()
 ```
-Toimittu kurssin esimerkin mukaisesti: Tässä ongelmaksi voisi tulla, että sama oletusarvona oleva tyhjä listaolio on jaettu kaikkien funktion kutsujen kesken ja jos jossain kutsussa listan sisältöä muutettaisiin, tämä muutos näkyisi myös muihin kutsuihin. Käytännössä tässä tapauksessa tämä ei kuitenkaan haittaa, koska koodi ei muuta listaoliota.
+Tyhjä lista oletusarvona voisi olla ongelma, jossa tyhjä listaolio on jaettu kaikkien funktion kutsujen kesken ja jos jossakin kutsussa listan sisältöä muutettaisiin. Tällöin muutos vaikuttaisi myös muihin kutsuihin. Koodi ei kuitenkaan muuta listaoliota, joten tälläistä tilannetta ei synny.
 
 # Liian monta muuttujaa
 
-Items.py -modulissa on on pari huomautusta, että sql-komennolle annetaan liian monta muuttujaa.
+Items.py -modulissa on on pari huomautusta, että SQL-komennolle annetaan liian monta muuttujaa.
 ```
 items.py:3:0: R0913: Too many arguments (7/5) (too-many-arguments)
 ```
