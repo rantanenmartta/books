@@ -344,9 +344,13 @@ def remove_image():
 
 @app.route("/register")
 def register():
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
     return render_template("register.html")
 @app.route("/create", methods=["POST"])
 def create():
+    check_csrf()
+
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -367,14 +371,19 @@ def create():
         flash("VIRHE: tunnus on jo varattu")
         return redirect("/register")
 
+    session["csrf_token"] = secrets.token_hex(16)
+
     return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        if "csrf_token" not in session:
+            session["csrf_token"] = secrets.token_hex(16)
         return render_template("login.html")
 
     if request.method == "POST":
+        check_csrf()
         username = request.form["username"]
         password = request.form["password"]
 
