@@ -30,7 +30,7 @@
    {% for class in all_classes %}
    <p>
      <label for="class{{ class }}">{{ class }}:</label> <br />
-     <select name="classes" id="class{{ class }}>
+     <select name="classes" id="class{{ class }}">
         <option value="">(valitse)</option>
      {% for option in all_classes[class] %}
        {% if classes[class] == option %}
