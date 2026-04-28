@@ -127,7 +127,7 @@ def create_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    item_id = items.add_item(book_name, writer_name, pub_year, 
+    item_id = items.add_item(book_name, writer_name, pub_year,
                              description, user_id, read_year, classes)
 
     return redirect("/item/" + str(item_id))
@@ -148,7 +148,7 @@ def edit_item(item_id):
     for entry in items.get_classes(item_id):
         classes[entry["title"]] = entry["value"]
 
-    return render_template("edit_item.html", item=item, 
+    return render_template("edit_item.html", item=item,
                            classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
@@ -204,7 +204,7 @@ def remove_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-    
+
     if request.method == "GET":
         item = items.get_item(item_id)
         return render_template("remove_item.html", item=item)

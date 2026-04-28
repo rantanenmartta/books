@@ -81,7 +81,7 @@ def find_items(query):
     return db.query(sql, [like, like, like, like, like])
 
 def add_comment(book_id, user_id, content):
-    sql = """INSERT INTO comments (book_id, user_id, content, sent_at) 
+    sql = """INSERT INTO comments (book_id, user_id, content, sent_at)
             VALUES (?, ?, ?, datetime('now'))"""
     db.execute(sql, [book_id, user_id, content])
 
@@ -102,7 +102,7 @@ def get_comment(comment_id):
             FROM comments, users
             WHERE comments.id = ? and comments.user_id = users.id"""
     return db.query(sql, [comment_id])
-    
+
 def update_comment(comment_id, content):
     sql = "UPDATE comments SET content = ? WHERE id = ?"
     db.execute(sql, [content, comment_id])
