@@ -110,7 +110,7 @@ def update_comment(comment_id, content):
 def remove_comment(comment_id):
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])
-    
+
 def get_all_classes():
     sql = "SELECT title, value FROM classes ORDER BY id"
     result = db.query(sql)
@@ -122,7 +122,7 @@ def get_all_classes():
         classes[title].append(value)
 
     return classes
-    
+
 def get_classes(item_id):
     sql = "SELECT title, value FROM book_classes WHERE book_id = ?"
     return db.query(sql, [item_id])

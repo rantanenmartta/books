@@ -105,7 +105,7 @@ def create_item():
         abort(403)
     pub_year = request.form["pub_year"]
 
-    if not re.search("^[1-9][0-9]{0,4}$", pub_year):
+    if not pub_year or not re.search("^[1-9][0-9]{0,4}$", pub_year):
         abort(403)
     description = request.form.get("description", "")
     if not description or len(description) > 1500:
@@ -172,7 +172,7 @@ def update_item():
     if not writer_name or len(writer_name) > 50:
         abort(403)
     pub_year = request.form["pub_year"]
-    if not re.search("^[1-9][0-9]{0,4}$", pub_year):
+    if not pubyear or not re.search("^[1-9][0-9]{0,4}$", pub_year):
         abort(403)
     description = request.form.get("description", "")
     if not description or len(description) > 1500:
