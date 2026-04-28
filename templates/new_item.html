@@ -15,7 +15,7 @@
   </p>
   <p>
     <label for="pub_year">Julkaisuvuosi:</label> <br />
-    <input type="text" name="pub_year" id="pub_year" maxlength="4" pattern="[1-9][0-9]{0,4}"/>
+    <input type="text" name="pub_year" id="pub_year" maxlength="4" pattern="[1-9][0-9]{0,4}" required />
   </p>
   <p>
     <label for="description">Kuvaus:</label> <br />
@@ -23,7 +23,7 @@
   </p>
   <p>
     <label for="read_year">Lukuvuosi:</label> <br />
-    <input type="number" name="read_year" min="1900" max="2100">
+    <input type="number" name="read_year" min="1900" max="2100" required >
   </p>
   {% for class in classes %}
   <p>
