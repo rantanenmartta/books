@@ -3,11 +3,8 @@ import db
 def add_item(book_name, writer_name, pub_year, description, user_id, read_year, classes):
     sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id, read_year)
             VALUES (?, ?, ?, ?, ?, ?)"""
-    try:
-        db.execute(sql, [book_name, writer_name, pub_year, description, user_id, read_year])
-    except Exception as e:
-        print("DB Error:", e)
-        abort(400)
+
+    db.execute(sql, [book_name, writer_name, pub_year, description, user_id, read_year])
 
     item_id = db.last_insert_id()
 
