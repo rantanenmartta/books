@@ -36,3 +36,8 @@ CREATE TABLE book_classes (
     value TEXT
 );
 
+CREATE INDEX idx_books_user_id ON books(user_id);
+CREATE INDEX idx_comments_user_id ON comments(user_id);
+CREATE INDEX idx_comments_book_id ON comments(book_id);
+CREATE INDEX idx_book_classes_book_id ON book_classes(book_id);
+
