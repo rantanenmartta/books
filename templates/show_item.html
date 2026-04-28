@@ -54,20 +54,26 @@
 {% endif %}
 
 <h3 id="comments">Kommentit</h3>
-{% for comment in comments %}
-<div class="comment">
+{% if comments %}
+    {% for comment in comments %}
+    <div class="comment">
+    <p>
+     {{ comment.content | show_lines }}
+    </p>
+    <a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})
+    {% if session.user_id == comment.user_id %}
+    <p>
+      <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
+      <a href="/remove_comment/{{ comment.id }}">Poista</a>
+    </p>
+    {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
 <p>
-{{ comment.content | show_lines }}
-</p>
-<a href="/user/{{  comment.user_id  }}">{{ comment.username }}</a> ({{ comment.sent_at }})
-{% if session.user_id == comment.user_id %}
-<p>
-  <a href="/edit_comment/{{ comment.id }}">Muokkaa</a>
-  <a href="/remove_comment/{{ comment.id }}">Poista</a>
+   Ei kommentteja.
 </p>
 {% endif %}
-</div>
-{% endfor %}
 <p>
   <a href="/item/{{ item.id }}?page={{ page - 1 }}#comments">&lt;&lt;</a>
   Sivu {{ page }}/{{ page_count }}
