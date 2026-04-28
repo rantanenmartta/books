@@ -8,7 +8,6 @@ import markupsafe
 import config
 import items
 import users
-#import db
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -83,7 +82,7 @@ def show_item(item_id):
     comments = items.get_comments(item_id, page, page_size)
 
     return render_template("show_item.html", item=item, classes=classes,
-                    comments=comments, page=page, page_count=page_count)
+                           comments=comments, page=page, page_count=page_count)
 
 @app.route("/new_item")
 def new_item():
@@ -104,7 +103,6 @@ def create_item():
     if not writer_name or len(writer_name) > 50:
         abort(403)
     pub_year = request.form["pub_year"]
-
     if not pub_year or not re.search("^[1-9][0-9]{0,4}$", pub_year):
         abort(403)
     description = request.form.get("description", "")
@@ -129,8 +127,8 @@ def create_item():
                 abort(403)
             classes.append((class_title, class_value))
 
-    item_id = items.add_item(book_name, writer_name, pub_year,
-                            description, user_id, read_year, classes)
+    item_id = items.add_item(book_name, writer_name, pub_year, 
+                             description, user_id, read_year, classes)
 
     return redirect("/item/" + str(item_id))
 
@@ -150,8 +148,8 @@ def edit_item(item_id):
     for entry in items.get_classes(item_id):
         classes[entry["title"]] = entry["value"]
 
-    return render_template("edit_item.html", item=item,
-                            classes=classes, all_classes=all_classes)
+    return render_template("edit_item.html", item=item, 
+                           classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -172,7 +170,7 @@ def update_item():
     if not writer_name or len(writer_name) > 50:
         abort(403)
     pub_year = request.form["pub_year"]
-    if not pubyear or not re.search("^[1-9][0-9]{0,4}$", pub_year):
+    if not pub_year or not re.search("^[1-9][0-9]{0,4}$", pub_year):
         abort(403)
     description = request.form.get("description", "")
     if not description or len(description) > 1500:
@@ -206,6 +204,7 @@ def remove_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
+    
     if request.method == "GET":
         item = items.get_item(item_id)
         return render_template("remove_item.html", item=item)
@@ -347,6 +346,7 @@ def register():
     if "csrf_token" not in session:
         session["csrf_token"] = secrets.token_hex(16)
     return render_template("register.html")
+
 @app.route("/create", methods=["POST"])
 def create():
     check_csrf()

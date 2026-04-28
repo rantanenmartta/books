@@ -40,8 +40,7 @@ def get_item(item_id):
                     u.id user_id,
                     u.username
             FROM books b, users u
-            WHERE b.user_id = u.id AND
-            b.id = ?"""
+            WHERE b.user_id = u.id AND b.id = ?"""
     result = db.query(sql, [item_id])
     return result[0] if result else None
 
@@ -74,15 +73,16 @@ def remove_item(item_id):
 def find_items(query):
     sql = """SELECT b.id, b.book_name, u.username
             FROM books b JOIN users u ON b.user_id = u.id
-            WHERE b.book_name LIKE ? or b.writer_name LIKE ? or b.pub_year LIKE ? or b.description LIKE ?
+            WHERE b.book_name LIKE ? or b.writer_name LIKE ? 
+            or b.pub_year LIKE ? or b.description LIKE ?
             or b.read_year LIKE ?
             ORDER BY b.id DESC"""
     like = "%" + query + "%"
     return db.query(sql, [like, like, like, like, like])
 
 def add_comment(book_id, user_id, content):
-    sql = """INSERT INTO comments (book_id, user_id, content, sent_at) VALUES
-            (?, ?, ?, datetime('now'))"""
+    sql = """INSERT INTO comments (book_id, user_id, content, sent_at) 
+            VALUES (?, ?, ?, datetime('now'))"""
     db.execute(sql, [book_id, user_id, content])
 
 def get_comments(item_id, page, page_size):
