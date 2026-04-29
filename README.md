@@ -7,7 +7,7 @@
   * Käyttäjä pystyy lisäämään lukemiaan kirjoja ja muokkaamaan ja poistamaan niitä.
   * Käyttäjä näkee sovellukseen lisätyt kirjat.
   * Käyttäjä pystyy etsimään kirjoja hakusanalla, esim. kirjan nimellä, kirjailijan nimellä tai sanalla, joka löytyy kirjan kuvauksesta.
-  * Käyttäjäsivu näyttää, montako kirjaa käyttäjä on lukenut - eroteltuna vuosittain - ja listan käyttäjän lisäämistä kirjoista.
+  * Käyttäjäsivu näyttää, montako kirjaa käyttäjä on lukenut yhteensä ja listan käyttäjän lisäämistä kirjoista. Lisäksi käyttäjäsivulla on tilasto siitä, kuinka monta kirjaa käyttäjä on lukenut viimeisten 10 vuoden aikana, vuosittain eroteltuna (huomioi vain vuodet, jolloin käyttäjä on lukenut ainakin 1 kirjan).
   * Käyttäjä pystyy valitsemaan kirjalle kirjallisuuslajin/genren (esim. kaunokirjallisuus, dekkari, skifi)
   * Käyttäjät pystyvät keskustelemaan kirjasta kommenttiosiossa. Kirjasta annetut kommentit on koottu yhteen.
   * Käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään kommentteja.
