@@ -1,4 +1,5 @@
 import db
+import datetime
 
 def add_item(book_name, writer_name, pub_year, description, user_id, read_year, classes):
     sql = """INSERT INTO books (book_name, writer_name, pub_year, description, user_id, read_year)
@@ -153,9 +154,12 @@ def count_books_by_year(user_id, year):
     return db.query(sql, [user_id, year])[0][0]
 
 def books_grouped_by_year(user_id):
+    current_year = datetime.date.today().year
+    start_year = current_year - 9
     sql = """SELECT read_year, COUNT(*) AS count
             FROM books
             WHERE user_id = ? AND read_year IS NOT NULL
+            AND read_year >= ?
             GROUP BY read_year
             ORDER BY read_year DESC"""
-    return db.query(sql, [user_id])
+    return db.query(sql, [user_id, start_year])
