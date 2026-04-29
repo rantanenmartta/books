@@ -58,6 +58,8 @@ Tiedosto lisää 1000 käyttäjää, 100 000 kirjaa ja 1 000 000 kommenttia satu
 Sovellus toimii tehokkaasti ilman viivästyksiä tai sivun latauksen hitautta myös suuren tietomäärän kanssa seuraavista syistä:
 - Käyttäjien lisäämät kirjat on sivutettu niin, että yhdellä sivulla näkyy korkeintaan 10 kirjaa.
 - Kirjaan liittyvät kommentit on sivutettu niin, että yhdellä sivulla näkyy korkeintaan 5 kommenttia.
+- Haku-sivulla tulokset on sivutettu niin, että yhdellä sivulla näkyy korkeintaan 5 tulosta.
+- Käyttäjäsivulla käyttäjän lukemat kirjat on sivutettu niin, että yhdellä sivulla näkyy korkeintaan 10 kirjaa.
 - Lisäksi tietokantaan on lisätty kyselyjä tehostavia indeksejä:
   
 ```
