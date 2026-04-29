@@ -67,16 +67,28 @@ def remove_item(item_id):
     sql = "DELETE FROM books WHERE id = ?"
     db.execute(sql, [item_id])
 
-def find_items(query):
+def find_items(query, page, page_size):
     sql = """SELECT b.id, b.book_name, u.username
             FROM books b JOIN users u ON b.user_id = u.id
             WHERE b.book_name LIKE ? or b.writer_name LIKE ? 
             or b.pub_year LIKE ? or b.description LIKE ?
             or b.read_year LIKE ?
-            ORDER BY b.id DESC"""
+            ORDER BY b.id DESC
+            LIMIT ? OFFSET ?"""
     like = "%" + query + "%"
-    return db.query(sql, [like, like, like, like, like])
+    limit = page_size
+    offset = page_size * (page - 1)
 
+    return db.query(sql, [like, like, like, like, like, limit, offset])
+
+def count_items(query):
+    sql = """SELECT COUNT(*)
+             FROM books b
+             WHERE b.book_name LIKE ? or b.writer_name LIKE ?
+             or b.pub_year LIKE ? or b.description LIKE ?
+             or b.read_year LIKE ?"""
+    like = "%" + query + "%"
+    return db.query(sql, [like, like, like, like, like])[0][0]
 def add_comment(book_id, user_id, content):
     sql = """INSERT INTO comments (book_id, user_id, content, sent_at)
             VALUES (?, ?, ?, datetime('now'))"""

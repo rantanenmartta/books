@@ -65,12 +65,23 @@ def show_user(user_id):
 @app.route("/find_item")
 def find_item():
     query = request.args.get("query")
+
+    page = request.args.get("page", 1, type=int)
+    page = max(page, 1)
+    page_size = 5
+
     if query:
-        results = items.find_items(query)
+        total = items.count_items(query)
+        page_count = max((total + page_size - 1) // page_size, 1)
+        page = min(page, page_count)
+
+        results = items.find_items(query, page, page_size)
     else:
         query = ""
         results = []
-    return render_template("find_item.html", query=query, results=results)
+        page_count = 1
+
+    return render_template("find_item.html", query=query, results=results, page=page, page_count=page_count)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
