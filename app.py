@@ -48,9 +48,19 @@ def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    user_items = users.get_items(user_id)
+
+    page = request.args.get("page", 1, type=int)
+    page = max(page, 1)
+    page_size = 10
+
+    total = users.count_books_user(user_id)
+    page_count = max((total + page_size -1) // page_size, 1)
+    page = min(page, page_count)
+
+    user_items = users.get_items(user_id, page, page_size)
     year_counts = items.books_grouped_by_year(user_id)
-    return render_template("show_user.html", user=user, items=user_items, year_counts=year_counts)
+
+    return render_template("show_user.html", user=user, items=user_items, year_counts=year_counts, page=page, page_count=page_count)
 
 @app.route("/find_item")
 def find_item():

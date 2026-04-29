@@ -8,9 +8,11 @@ def get_user(user_id):
     result = db.query(sql, [user_id])
     return result[0] if result else None
 
-def get_items(user_id):
-    sql = "SELECT id, book_name FROM books WHERE user_id = ? ORDER BY id DESC"
-    return db.query(sql, [user_id])
+def get_items(user_id, page, page_size):
+    sql = "SELECT id, book_name FROM books WHERE user_id = ? ORDER BY id DESC LIMIT ? OFFSET ?"
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [user_id, limit, offset])
 
 def create_user(username, password):
     password_hash = generate_password_hash(password)
@@ -37,3 +39,7 @@ def get_image(user_id):
     sql = "SELECT image FROM users WHERE id = ?"
     result = db.query(sql, [user_id])
     return result[0][0] if result else None
+
+def count_books_user(user_id):
+    sql = "SELECT COUNT(*) FROM books WHERE user_id = ?"
+    return db.query(sql, [user_id])[0][0]

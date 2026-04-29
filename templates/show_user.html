@@ -39,11 +39,17 @@
 {% endfor %}
 </ul>
 
-<h3>Luetut kirjat</h3>
+<h3 id="books">Luetut kirjat</h3>
 {% for item in items %}
 <div class="user_books">
 <a href="/item/{{ item.id }}">{{ item.book_name }}</a>
 </div>
 {% endfor %}
+
+<p>
+  <a href="/user/{{ user.id }}?page={{ page - 1 }}#books">&lt;&lt;</a>
+  Sivu {{ page }}/{{ page_count }}
+  <a href="/user/{{ user.id }}?page={{ page + 1 }}#books">&gt;&gt;</a>
+</p>
 
 {% endblock %}
