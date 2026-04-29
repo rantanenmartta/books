@@ -60,7 +60,8 @@ def show_user(user_id):
     user_items = users.get_items(user_id, page, page_size)
     year_counts = items.books_grouped_by_year(user_id)
 
-    return render_template("show_user.html", user=user, items=user_items, year_counts=year_counts, page=page, page_count=page_count)
+    return render_template("show_user.html", user=user, items=user_items, year_counts=year_counts,
+                           page=page, page_count=page_count)
 
 @app.route("/find_item")
 def find_item():
@@ -81,7 +82,8 @@ def find_item():
         results = []
         page_count = 1
 
-    return render_template("find_item.html", query=query, results=results, page=page, page_count=page_count)
+    return render_template("find_item.html", query=query, results=results,
+                           page=page, page_count=page_count)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
