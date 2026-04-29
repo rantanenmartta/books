@@ -78,6 +78,7 @@ Your code has been rated at 8.50/10 (previous run: 8.50/10, +0.00)
 ```
 
 Alla on käyty läpi erilaiset pylint-raportin antamat ilmoitukset ja syyt, miksi kyseistä asiaa ei ole korjattu koodissa.
+Huom! Pylint-raportissa ei ole huomioitu seed.py -tiedoston huomautuksia.
 
 # Docstring -ilmoitukset
 
