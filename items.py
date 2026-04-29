@@ -68,7 +68,7 @@ def remove_item(item_id):
     db.execute(sql, [item_id])
 
 def find_items(query, page, page_size):
-    sql = """SELECT b.id, b.book_name, u.username
+    sql = """SELECT b.id, b.book_name, u.username, u.id AS user_id
             FROM books b JOIN users u ON b.user_id = u.id
             WHERE b.book_name LIKE ? or b.writer_name LIKE ? 
             or b.pub_year LIKE ? or b.description LIKE ?
